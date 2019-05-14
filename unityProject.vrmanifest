@@ -1,0 +1,16 @@
+{
+  "source": "Unity",
+  "applications": [
+    {
+      "app_key": "application.generated.unity.vivebuildsimulator.exe",
+      "launch_type": "url",
+      "url": "steam://launch/",
+      "action_manifest_path": "C:\\Users\\Veli-Matti\\Desktop\\Diablo4\\ViveBuildSimulator\\actions.json",
+      "strings": {
+        "en_us": {
+          "name": "ViveBuildSimulator [Testing]"
+        }
+      }
+    }
+  ]
+}
