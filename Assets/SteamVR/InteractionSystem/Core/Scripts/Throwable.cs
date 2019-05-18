@@ -126,6 +126,7 @@ namespace Valve.VR.InteractionSystem
             {
 				hand.AttachObject( gameObject, startingGrabType, attachmentFlags, attachmentOffset );
                 hand.HideGrabHint();
+                
             }
 		}
 

@@ -66,7 +66,6 @@ public class NetworkController : MonoBehaviour
     private void MasterLoadedScene()
     {
         playersInGame = 1;
-        GameController.instance.StartGame ( );
         _photonView.RPC ( "RPC_LoadGameOthers", PhotonTargets.Others );
     
     }

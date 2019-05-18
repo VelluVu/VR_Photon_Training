@@ -8,10 +8,10 @@ public class PlayerListing : MonoBehaviour
 
     public TextMeshProUGUI playerName;
 
-    GameObject roomControl;
+    RoomControl roomControl;
     Button button;
 
-    public delegate GameObject NewPlayerListedDelegate ( );
+    public delegate void NewPlayerListedDelegate ( );
     public static event NewPlayerListedDelegate newPlayerListedEvent;
 
     public void ApplyPhotonPlayer ( PhotonPlayer photonPlayer )
@@ -21,20 +21,21 @@ public class PlayerListing : MonoBehaviour
     
         if ( newPlayerListedEvent != null )
         {
-            roomControl = newPlayerListedEvent ( );
+            newPlayerListedEvent ( );
         }
 
     }
 
     private void Start ( )
     {
+        roomControl = FindObjectOfType<RoomControl>();
         button = gameObject.GetComponent<Button> ( );
         button.onClick.AddListener ( ( ) => SelectedPlayer ( ) );
     }
 
     public void SelectedPlayer ( )
     {
-        roomControl.GetComponent<RoomControl> ( ).SetSelectedPlayer ( _photonPlayer );
+        roomControl.SetSelectedPlayer ( _photonPlayer );
     }
 
 }

@@ -25,27 +25,24 @@ public class LobbyScript : MonoBehaviour
 
     private void OnEnable ( )
     {
-        RoomListing.newListingEvent += InitNewListing;
+        RoomListing.roomListingEvent += NameNewRoomListing;
     }
 
     private void OnDisable ( )
     {
-        RoomListing.newListingEvent -= InitNewListing;
+        RoomListing.roomListingEvent -= NameNewRoomListing;
     }
 
-    public GameObject InitNewListing(GameObject listing)
+    public void NameNewRoomListing ( TextMeshProUGUI text )
     {
-
-        if ( inputField.text.Length - 1 <= 0 )
+        if ( inputField.text.Length <= 0 )
         {
-            listing.GetComponent<RoomListing> ( )._roomNameText.text = PhotonNetwork.player.NickName + "s.room";
+            text.text = PhotonNetwork.player.NickName + "s_room";
         }
         else
         {
-            listing.GetComponent<RoomListing> ( )._roomNameText.text = inputField.text;
+            text.text = inputField.text;
         }
-
-        return lobby;
     }
 
     private void Start ( )
@@ -87,7 +84,7 @@ public class LobbyScript : MonoBehaviour
         roomOptions.IsVisible = true;
         roomOptions.IsOpen = true;
         roomOptions.MaxPlayers = 5;
-
+   
         if (inputField.text.Length <= 1)
         {
             if(PhotonNetwork.CreateRoom ( PhotonNetwork.player.NickName + "s_room", roomOptions, TypedLobby.Default ))
@@ -107,7 +104,7 @@ public class LobbyScript : MonoBehaviour
             {
                 room.SetActive ( true );
                 lobby.SetActive ( false );
-                Debug.Log ( "Create room successful " + PhotonNetwork.player.NickName + "s_room" );            
+                Debug.Log ( "Create room successful " + inputField.text );            
             }
             else
             {

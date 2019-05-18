@@ -12,22 +12,23 @@ public class RoomListing : MonoBehaviour
     Button button;
     public bool updated;
 
-    public delegate GameObject NewListingDelegate ( GameObject roomlisting );
-    public static event NewListingDelegate newListingEvent;
+    public delegate void RoomListingDelegate ( TextMeshProUGUI roomName );
+    public static event RoomListingDelegate roomListingEvent;
 
     private void Start ( )
-    {
-        if ( newListingEvent != null)
-        {
-            lobbyCanvasObj = newListingEvent ( gameObject );
-        }
-
+    { 
         if(lobbyCanvasObj == null)
         {
             return;
         }
-
+        _roomNameText = gameObject.GetComponent<TextMeshProUGUI> ( );
         LobbyScript lobbyScript = lobbyCanvasObj.GetComponent<LobbyScript> ( );
+        if (roomListingEvent != null)
+        {
+            roomListingEvent ( _roomNameText );
+        }
+
+        Debug.Log ( _roomNameText );
 
         button = GetComponent<Button> ( );
         button.onClick.AddListener ( () => SelectThis (lobbyScript ) );

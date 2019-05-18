@@ -2,24 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Valve.VR;
+using VRUiKits.Utils;
 
 public class GameController : MonoBehaviour
 {
     [HideInInspector] public static GameController instance;
 
-    public bool gameOn;
+    public static bool gameOn;
 
+    public GameObject teleportingPrefab;
     //ref to prefabs
     public GameObject rmainPlayer;
-    public GameObject rvrInput;
+    //public GameObject rvrInput;
+    public GameObject uIlaser;
     public GameObject rmenuC;
 
     GameObject mainPlayer;
-    GameObject vrInput;
+    //GameObject vrInput;
+    GameObject UIlaser;
     GameObject menuC;
 
     public GameObject [ ] netWorkPlayers;
-    public Transform [ ] spawnPositions;
+    public Transform [ ] spawnPositions = new Transform[5];
+
+    public bool DEVELOPERMODE = false;
+
+    public delegate void LaserIsOffDelegate ( );
+    public static event LaserIsOffDelegate laserIsOffEvent;
 
     private void Awake ( )
     {
@@ -27,44 +37,68 @@ public class GameController : MonoBehaviour
         if(instance == null)
         {
             instance = this;
+            
         }
         else if(instance != null)
         {
             Destroy ( gameObject );
         }
-     
+
+        for (int i = 0 ; i < spawnPositions.Length ; i++ )
+        {
+            spawnPositions[i] = transform.parent.transform.GetChild ( 4 ).GetChild ( i ).transform;
+        }
+
+        
+  
     }
 
-    private void Start ( )
+    private void OnEnable ( )
     {
-        if ( SceneManager.GetActiveScene().name == "LobbyScene" )
+        SceneManager.sceneLoaded += CheckLoadedScene;
+    }
+
+    private void OnDisable ( )
+    {
+        SceneManager.sceneLoaded -= CheckLoadedScene;
+    }
+
+    public void CheckLoadedScene (Scene scene, LoadSceneMode loadSceneMode )
+    {
+        if(scene.name == "LobbyScene")
         {
             SpawnPlayer ( );
+        }
+        else
+        {
+
+            if(DEVELOPERMODE) 
+            {
+
+            SpawnPlayer();
+  
+            }
+
+            StartGame ( );
+
         }
     }
 
     public void SpawnPlayer()
     {
         mainPlayer = Instantiate ( rmainPlayer, Vector3.zero, Quaternion.identity );
-        vrInput = Instantiate ( rvrInput, Vector3.zero, Quaternion.identity );
-        menuC = Instantiate ( rmenuC, new Vector3 ( 0, 2, -2 ), Quaternion.identity );
-
-        mainPlayer.transform.GetChild ( 1 ).transform.GetChild ( 1 ).gameObject.GetComponent<Pointer> ( ).eventCam = mainPlayer.transform.GetChild ( 1 ).gameObject.GetComponentInChildren<Camera> ( );
-        mainPlayer.transform.GetChild ( 1 ).transform.GetChild ( 1 ).gameObject.GetComponent<Pointer> ( ).inputModule = vrInput.GetComponent<VRInputModule> ( );
-
-        vrInput.GetComponent<VRInputModule> ( ).SetEventCamera ( mainPlayer.transform.GetChild ( 1 ).gameObject.GetComponentInChildren<Camera> ( ) );
-        menuC.GetComponent<Canvas> ( ).worldCamera = mainPlayer.transform.GetChild ( 1 ).gameObject.GetComponentInChildren<Camera> ( );
-        menuC.transform.rotation = Quaternion.Euler ( 0, 180, 0 );
-
-        Debug.Log ( mainPlayer.transform.GetChild ( 1 ).transform.GetChild ( 1 ).gameObject.GetComponent<Pointer> ( ).inputModule );
-        Debug.Log ( mainPlayer.transform.GetChild ( 1 ).gameObject.GetComponentInChildren<Camera> ( ) );
+        UIlaser = Instantiate ( uIlaser, Vector3.zero, Quaternion.identity );
+        menuC = Instantiate ( rmenuC, new Vector3 ( 0, 2, 2 ), Quaternion.identity );
+        Instantiate ( teleportingPrefab );
     }
 
     public void StartGame()
     {
-        gameOn = true;
-        SpawnPlayer ( );
-        SpawnNetworkPlayers ( ); // <---------- CALL THIS FROM NETWORK CONTROLLER
+    
+        SpawnNetworkPlayers ( );
+        Instantiate ( teleportingPrefab );
+        DeactivateLaser ( );
+
     }
 
     public void SpawnNetworkPlayers ( )
@@ -76,6 +110,33 @@ public class GameController : MonoBehaviour
             PhotonNetwork.Instantiate( netWorkPlayer.name, spawnPositions [ index ].position , Quaternion.identity, 0);
             index++;
         }
+    }
+
+    public void DeactivateLaser()
+    {
+        UIlaser.SetActive ( false );
+    }
+
+    public void ActivateLaser ( )
+    {
+        UIlaser.SetActive ( true );
+    }
+
+    public void DeactivateLaserInput()
+    {
+        mainPlayer.GetComponentInChildren<LaserInputModule> ( ).activeLaser = false ;
+        //says everyone that now laser is off no interaction with ui is going to happen...
+        if(laserIsOffEvent != null)
+        {
+            laserIsOffEvent ( );
+        }
+       
+    }
+
+    public void ActivateLaserInput()
+    {
+        mainPlayer.GetComponentInChildren<LaserInputModule> ( ).activeLaser = true;
+        
     }
 
 }

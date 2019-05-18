@@ -17,13 +17,31 @@ public class ButtonTransitioner : MonoBehaviour, IPointerEnterHandler, IPointerU
         m_image = GetComponent<Image> ( );
     }
 
+    /// <summary>
+    /// Loses Track of input system when laser is deactivated so this event turns the color back to normal...
+    /// </summary>
+    private void OnEnable ( )
+    {
+        GameController.laserIsOffEvent += BackToNormalColor;
+    }
+
+    private void OnDisable ( )
+    {
+        GameController.laserIsOffEvent -= BackToNormalColor;
+    }
+
+    public void BackToNormalColor()
+    {
+        m_image.color = m_normalColor;
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         m_image.color = m_hoverColor;
     }
 
     public void OnPointerExit(PointerEventData eventData)
-    {
+    {     
         m_image.color = m_normalColor;
     }
 

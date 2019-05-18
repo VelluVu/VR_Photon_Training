@@ -541,7 +541,8 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    1: ODIN_INSPECTOR_STEAM_2_STEAM_2;ODIN_INSPECTOR_STEAM_2;UIKIT_VIVE_STEAM_2;ODIN_INSPECTOR;UIKIT_TMP
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}

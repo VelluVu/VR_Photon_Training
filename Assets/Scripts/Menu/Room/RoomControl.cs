@@ -20,8 +20,8 @@ public class RoomControl : MonoBehaviour
     }
 
     void GOGO()
-    {       
-        GameController.instance.StartGame ( );
+    {
+        PhotonNetwork.LoadLevel ( 1 );
     } 
 
     void Sync()

@@ -43,11 +43,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1841158af47b4244790f2d6ec9149917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  instance: {fileID: 0}
-  gameOn: 1
-  rmainPlayer: {fileID: 8265261277370289287, guid: 6a27d200132a72b409c696e4f305c915,
+  teleportingPrefab: {fileID: 3556624233830869708, guid: 2a951e4f0504d954fbebff865ab52ed1,
     type: 3}
-  rvrInput: {fileID: 331566014979438362, guid: 968f03435f522a746855e9389baf2d00, type: 3}
+  rmainPlayer: {fileID: 6998364130198770001, guid: 22106b70ed4ece746931866793d5f8c3,
+    type: 3}
+  uIlaser: {fileID: 1367991866536212, guid: a04745b2f6eda6c4aae50f5029085d16, type: 3}
   rmenuC: {fileID: 7551569755023848931, guid: 029a211a1e004dd42aecf9647072afe8, type: 3}
   netWorkPlayers:
   - {fileID: 7847607745658076013, guid: 1e3382486b9eeb74891e379a47ffbab1, type: 3}
